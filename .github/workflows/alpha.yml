@@ -18,7 +18,8 @@ jobs:
       - name: Start containers
         run: |
           docker compose -f docker-compose-alpha.yml --env-file .env.alpha up -d
-      - uses: emilioschepis/wait-for-endpoint@v1.0.3
+      - name: Check Dataverse Setup
+        uses: emilioschepis/wait-for-endpoint@v1.0.3
         with:
           url: http://localhost:8080/api/info/version
           timeout: 120000
@@ -39,7 +40,7 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v1
         with:
-          python-version: 3.10
+          python-version: "3.10"
       - name: Install dependencies
         run: |
           cd ./easyDataverse
