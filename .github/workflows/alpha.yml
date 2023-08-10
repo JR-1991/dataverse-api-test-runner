@@ -3,7 +3,8 @@ name: alpha
 on: workflow_dispatch
 
 jobs:
-  api:
+  setup_dataverse:
+    name: Setup Dataverse instance
     runs-on: ubuntu-latest
     steps:
       - name: Clone this repo
@@ -17,6 +18,37 @@ jobs:
       - name: Start containers
         run: |
           docker compose -f docker-compose-alpha.yml --env-file .env.alpha up -d
+  
+  test_easydataverse:
+    name: Setup Python and EasyDataverse
+    needs: ["test_dataverse_api", "setup_dataverse"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone EasyDataverse
+        uses: actions/checkout@v2
+        with:
+          repository: gdcc/easyDataverse
+          ref: flexible-connect
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.10
+      - name: Install dependencies
+        run: |
+          cd ./easyDataverse
+          python3 -m pip install --upgrade pip
+          python3 -m pip install .
+          python3 -m pip install pytest
+      - name: Check installation
+        run: |
+          python3 -m pytest
+
+
+  test_dataverse_api:
+    runs-on: ubuntu-latest
+    name: "Test Dataverse instance"
+    needs: ["setup_dataverse"]
+    steps:
       - uses: emilioschepis/wait-for-endpoint@v1.0.3
         with:
           url: http://localhost:8080/api/info/version
@@ -28,6 +60,5 @@ jobs:
           url: http://localhost:8080/api/metadatablocks
           timeout: 120000
           interval: 10000
-      - name: Stop containers
-        if: always()
-        run: docker compose -f docker-compose-alpha.yml --env-file .env.alpha down
+
+
