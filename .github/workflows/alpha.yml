@@ -24,11 +24,6 @@ jobs:
           url: http://localhost:8080/api/info/version
           timeout: 120000
           interval: 10000
-      - name: Run final setup script
-        run: |
-          cd dataverse
-          bash scripts/dev/docker-final-setup.sh
-          cd ..
       - name: Test metadatablocks
         uses: emilioschepis/wait-for-endpoint@v1.0.3
         with:
@@ -38,7 +33,7 @@ jobs:
 
       - name: Retrieve API Token
         run: |
-          source export_token.sh
+          echo "$API_TOKEN"
       
       - name: Set up Python 3.10
         uses: actions/setup-python@v1
