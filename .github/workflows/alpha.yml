@@ -3,8 +3,8 @@ name: alpha
 on: workflow_dispatch
 
 jobs:
-  setup_dataverse:
-    name: Setup Dataverse instance
+  test_easydataverse:
+    name: Test EasyDataverse
     runs-on: ubuntu-latest
     steps:
       - name: Clone this repo
@@ -30,11 +30,6 @@ jobs:
           url: http://localhost:8080/api/metadatablocks
           timeout: 120000
           interval: 10000
-      # - name: Clone EasyDataverse
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: gdcc/easyDataverse
-      #     ref: flexible-connect
       - name: Check content
         run: ls
       - name: Set up Python 3.10
@@ -50,9 +45,9 @@ jobs:
           python3 -m pip install git+https://github.com/gdcc/easyDataverse.git@flexible-connect
           python3 -m pip uninstall pydataverse -y
           python3 -m pip install git+https://github.com/JR-1991/pyDataverse.git
-      # - name: Check installation
-      #   run: |
-      #     python3 -m pytest
       - name: Check connect
         run: |
           python3 ./run_ed.py 
+      - name: Stop containers
+        if: always()
+        run: docker compose -f docker-compose-alpha.yml --env-file .env.alpha down
