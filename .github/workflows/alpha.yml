@@ -49,13 +49,3 @@ jobs:
       - name: Check installation
         run: |
           python3 -m pytest
-
-
-  test_dataverse_api:
-    runs-on: ubuntu-latest
-    name: "Test Dataverse instance"
-    needs: ["setup_dataverse"]
-    steps:
-      
-
-
