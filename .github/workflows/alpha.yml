@@ -30,6 +30,10 @@ jobs:
           url: http://localhost:8080/api/metadatablocks
           timeout: 120000
           interval: 10000
+
+      - name: Retrieve API Token
+        run: |
+          source export_token.sh
       
       - name: Set up Python 3.10
         uses: actions/setup-python@v1
