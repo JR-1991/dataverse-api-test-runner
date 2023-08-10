@@ -33,7 +33,7 @@ jobs:
 
       - name: Retrieve API Token
         run: |
-          env
+          docker ps
       
       - name: Set up Python 3.10
         uses: actions/setup-python@v1
