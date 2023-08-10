@@ -30,8 +30,7 @@ jobs:
           url: http://localhost:8080/api/metadatablocks
           timeout: 120000
           interval: 10000
-      - name: Check content
-        run: ls
+      
       - name: Set up Python 3.10
         uses: actions/setup-python@v1
         with:
